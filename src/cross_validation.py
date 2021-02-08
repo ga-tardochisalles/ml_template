@@ -70,13 +70,14 @@ class CrossValidation:
         elif self.problem_type == "multilabel_classification":
             if self.num_targets != 1:
                 raise Exception("Invalid number of targets for this problem type")
-            targets_as_lists = self.dataframe[self.target_cols[0]].apply(lambda x: str(x).split(self.multilabel_delimiter))
-            target = pd.DataFrame(preprocessing.MultiLabelBinarizer().fit_transform(targets_as_lists))
-            target = target.astype('string')
-            target = target.apply(''.join, axis=1)
-            print(target.head())
+            # targets_as_lists = self.dataframe[self.target_cols[0]].apply(lambda x: str(x).split(self.multilabel_delimiter))
+            # target = pd.DataFrame(preprocessing.MultiLabelBinarizer().fit_transform(targets_as_lists))
+            # target = target.astype(str)
+            # target = target.apply(''.join, axis=1)
+            # need to re-do this kf
+            target = self.target_cols[0]
             kf = model_selection.StratifiedKFold(n_splits=self.num_folds)
-            for fold, (train_idx, val_idx) in enumerate(kf.split(X=self.dataframe, y=target)):
+            for fold, (train_idx, val_idx) in enumerate(kf.split(X=self.dataframe, y=self.dataframe[target].values)):
                 self.dataframe.loc[val_idx, "kfold"] = fold
 
         else:
