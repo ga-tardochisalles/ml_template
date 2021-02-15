@@ -80,7 +80,7 @@ class CategoricalFeatures:
                     dataframe[new_col_name] = val[:, j]
             return dataframe
         elif self.enc_type == "ohe":
-            return self.ohe(dataframe[self.cat_feats].values)
+            return self.ohe.transform(dataframe[self.cat_feats].values)
         else:
             raise Exception("Enconding type not understood")
 
